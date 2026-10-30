@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的第一个网页</title>
+</head>
+<body>
+    <h1 id="my-title">我会写前端</h1>
+    <button id="my-btn">点我一下</button>
+
+    <script>
+        let title = document.getElementById("my-title");
+        let btn = document.getElementById("my-btn");
+
+        btn.onclick = function() {
+            title.innerText = "太牛了，你成功用 JS 改写了页面！";
+            title.style.color = "red";
+        };
+    </script>
+</body>
+</html>
