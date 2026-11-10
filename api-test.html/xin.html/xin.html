@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP 请求测试</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        .card { border: 1px solid #ccc; padding: 20px; width: 300px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        img { border-radius: 50%; margin-bottom: 10px; }
+        button { padding: 10px 20px; margin-top: 15px; cursor: pointer; background-color: #007acc; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>随机用户生成器</h2>
+    
+    <div class="card" id="user-card">
+        <p>点击下方按钮获取数据...</p>
+    </div>
+
+    <button id="fetch-btn">获取随机用户</button>
+
+    <script>
+        const btn = document.getElementById("fetch-btn");
+        const card = document.getElementById("user-card");
+
+        // 核心逻辑：发请求
+        btn.onclick = async function() {  // async 表示这是一个异步函数
+            card.innerHTML = "<p>加载中...</p>"; // 加载状态
+
+            try {
+                // 1. 发送 HTTP GET 请求（await 表示等待网络返回）
+                let response = await fetch("https://randomuser.me/api/");
+                
+                // 2. 把返回的数据解析成 JSON 格式的对象
+                let data = await response.json();
+                
+                // 3. 从复杂的 JSON 里提取我们需要的数据
+                let user = data.results[0];
+                let fullName = user.name.first + " " + user.name.last;
+                let email = user.email;
+                let avatar = user.picture.large;
+
+                // 4. 把数据拼成 HTML 塞进页面（模板字符串，用反引号 ` 包围）
+                card.innerHTML = `
+                    <img src="${avatar}" alt="avatar">
+                    <h3>${fullName}</h3>
+                    <p>${email}</p>
+                `;
+
+            } catch (error) {
+                // 如果断网或者接口挂了，会走这里
+                card.innerHTML = "<p style='color:red;'>请求失败，请检查网络。</p>";
+                console.error("报错了：", error);
+            }
+        };
+    </script>
+</body>
+</html>
